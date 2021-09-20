@@ -19,11 +19,12 @@ def sha512_hash(salt, string):
 
     return nacl.hash.sha512(salt + string, encoder=nacl.encoding.HexEncoder)
 
-if __name__ == "__main__":
-# In production the salt should come from a hardware random number generator
-# and will be shared between parties.
 
-# Salt must be 128 bytes in hex.
+if __name__ == "__main__":
+    # In production the salt should come from a hardware random number
+    # generator and will be shared between parties.
+
+    # Salt must be 128 bytes in hex.
     salt = "a" * 128
 
     message = "This is a message. Hash me!"
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     hashed = sha512_hash(salt, message)
     print(hashed)
 
-# make sure all memory is flushed after operations
+    # make sure all memory is flushed after operations
     del salt
     del message
     gc.collect()

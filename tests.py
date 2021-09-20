@@ -11,13 +11,12 @@ import unittest
 import mock
 import os
 
-try:
+if not os.path.exists("./.tmp"):
     os.mkdir("./.tmp")
-except:
-    pass
 
 with open("./.tmp/README.md", 'w') as f:
     f.write("This directory stores temporary keys for testing.\n")
+
 
 class TestFunctions(unittest.TestCase):
     def test_generate_signing_verify_key(self):
@@ -38,10 +37,10 @@ class TestFunctions(unittest.TestCase):
         # Are they properly converted to Hex?
         try:
             # if converting to "long, base16" works, it is Hex
-            s_to_long = long(signing_key_hex, 16)
-            v_to_long = long(verify_key_hex, 16)
-        except:
-            raise ValueError("Keys not converted to Hex format.")
+            _ = long(signing_key_hex, 16)
+            _ = long(verify_key_hex, 16)
+        except ValueError as e:
+            raise ValueError("Keys not converted to Hex format.", e)
 
     def test_generate_public_private_key(self):
         import nacl.public
@@ -61,14 +60,13 @@ class TestFunctions(unittest.TestCase):
         # Are they properly converted to Hex?
         try:
             # if converting to "long, base16" works, it is Hex
-            s_to_long = long(public_key_hex, 16)
-            v_to_long = long(private_key_hex, 16)
-        except:
-            raise ValueError("Keys not converted to Hex format.")
+            _ = long(public_key_hex, 16)
+            _ = long(private_key_hex, 16)
+        except ValueError as e:
+            raise ValueError("Keys not converted to Hex format.", e)
 
     def test_generate_symmetric_key(self):
         from PQencryption import utilities
-        from PQencryption.symmetric_encryption import salsa20_256_PyNaCl
 
         sym_raw = utilities.generate_symmetric_key()
         symmetric_key_hex = utilities.to_hex(sym_raw)
@@ -82,12 +80,12 @@ class TestFunctions(unittest.TestCase):
         # Is it properly converted to Hex?
         try:
             # if converting to "long, base16" works, it is Hex
-            s_to_long = long(symmetric_key_hex, 16)
-        except:
-            raise ValueError("Key not converted to Hex format.")
+            _ = long(symmetric_key_hex, 16)
+        except ValueError as e:
+            raise ValueError("Key not converted to Hex format.", e)
 
     @mock.patch('PQencryption.utilities.get_password',
-            return_value="Aa0!asdfasdfasdfasdf")
+                return_value="Aa0!asdfasdfasdfasdf")
     def test_public_key_import_export(self, input):
         import os
         from PQencryption import utilities
@@ -96,19 +94,19 @@ class TestFunctions(unittest.TestCase):
         verify_key_for_export_hex = utilities.to_hex(str(v_raw))
         path = ".tmp"
         s_header = ("# This is an encrypted private signing key."
-                "KEEP IT PRIVATE!\n")
+                    "KEEP IT PRIVATE!\n")
         v_header = ("# This is a public verification key."
-                "Distribute it to your respondents.\n")
+                    "Distribute it to your respondents.\n")
         s_name = "_PRIVATE_signing_key_CBS"
         v_name = "verify_key_CBS"
 
         utilities.export_key(signing_key_for_export_hex, path, s_name,
-            s_header, key_type="SigningKey")
+                             s_header, key_type="SigningKey")
         utilities.export_key(verify_key_for_export_hex, path, v_name,
-            v_header, key_type="VerifyKey")
+                             v_header, key_type="VerifyKey")
 
         signing_key_imported = utilities.import_key(path, s_name,
-                "SigningKey")
+                                                    "SigningKey")
         verify_key_imported = utilities.import_key(path, v_name, "VerifyKey")
 
         os.remove(path + "/" + s_name)
@@ -121,7 +119,7 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(verify_key_for_export_hex, verify_key_imported_hex)
 
     @mock.patch('PQencryption.utilities.get_password',
-            return_value="Aa0!asdfasdfasdfasdf")
+                return_value="Aa0!asdfasdfasdfasdf")
     def test_symmetric_key_import_export(self, input):
         import os
         from PQencryption import utilities
@@ -129,40 +127,44 @@ class TestFunctions(unittest.TestCase):
         symmetric_key_for_export_hex = utilities.to_hex(s_raw)
         path = ".tmp"
         s_header = ("# This is an encrypted symmetric key."
-                "KEEP IT PRIVATE!\n")
+                    "KEEP IT PRIVATE!\n")
         s_name = "_PRIVATE_symmetric_key_CBS"
 
         utilities.export_key(symmetric_key_for_export_hex, path, s_name,
-            s_header, key_type="SymmetricKey")
+                             s_header, key_type="SymmetricKey")
 
         symmetric_key_imported = utilities.import_key(path, s_name,
-                "SymmetricKey")
+                                                      "SymmetricKey")
 
         os.remove(path + "/" + s_name)
 
         symmetric_key_imported_hex = utilities.to_hex(symmetric_key_imported)
 
         self.assertEqual(symmetric_key_for_export_hex,
-                symmetric_key_imported_hex)
+                         symmetric_key_imported_hex)
 
     def test_hashing_hashlib(self):
         from PQencryption.hashing import sha_512_hashlib
         salt = "a" * 128
         message = "This is a message. Hash me!"
         hashed_hashlib = sha_512_hashlib.sha512_hash(salt, message)
-        self.assertEqual(hashed_hashlib, "ab90b1da9cd3a8625a75a0e0aaaa5c7a14ab9dde9006d23cacac665cc0edbc9309d8cc715aaf715cbcad61e9ddb32eac785881e880bff32c22108cb58cf6a8bf")
+        self.assertEqual(hashed_hashlib,
+                         "ab90b1da9cd3a8625a75a0e0aaaa5c7a14ab9dde9006d23c" +
+                         "acac665cc0edbc9309d8cc715aaf715cbcad61e9ddb32eac" +
+                         "785881e880bff32c22108cb58cf6a8bf")
 
     def test_hashing_PyNaCl(self):
-        from PQencryption.hashing import sha_512_hashlib
         from PQencryption.hashing import sha_512_PyNaCl
         salt = "a" * 128
         message = "This is a message. Hash me!"
         hashed_PyNaCl = sha_512_PyNaCl.sha512_hash(salt, message)
-        self.assertEqual(hashed_PyNaCl, "ab90b1da9cd3a8625a75a0e0aaaa5c7a14ab9dde9006d23cacac665cc0edbc9309d8cc715aaf715cbcad61e9ddb32eac785881e880bff32c22108cb58cf6a8bf")
+        self.assertEqual(hashed_PyNaCl,
+                         "ab90b1da9cd3a8625a75a0e0aaaa5c7a14ab9dde9006d23c" +
+                         "acac665cc0edbc9309d8cc715aaf715cbcad61e9ddb32eac" +
+                         "785881e880bff32c22108cb58cf6a8bf")
 
     def test_symmetric_encryption_AES256(self):
         from PQencryption.symmetric_encryption import aes_256_Crypto
-        from PQencryption import utilities
 
         key = aes_256_Crypto.key_gen()
         message = 'This is my message.'
@@ -172,7 +174,7 @@ class TestFunctions(unittest.TestCase):
 
         # decryption
         my_decrypted_message = aes_256_Crypto.decrypt(my_encrypted_message,
-                key)
+                                                      key)
 
         self.assertNotEqual(message, my_encrypted_message)
         self.assertEqual(message, my_decrypted_message)
@@ -181,7 +183,7 @@ class TestFunctions(unittest.TestCase):
         from PQencryption.symmetric_encryption import salsa20_256_PyNaCl
         from PQencryption import utilities
 
-        key = salsa20_256_PyNaCl.key_gen()
+        key = utilities.generate_symmetric_key()
         message = 'This is my message.'
 
         # encryption
@@ -189,7 +191,7 @@ class TestFunctions(unittest.TestCase):
 
         # decryption
         my_decrypted_message = salsa20_256_PyNaCl.decrypt(my_encrypted_message,
-                key)
+                                                          key)
 
         self.assertNotEqual(message, my_encrypted_message)
         self.assertEqual(message, my_decrypted_message)
@@ -203,12 +205,12 @@ class TestFunctions(unittest.TestCase):
 
         message = 'This is my message.'
 
-        signed_encrypted_signed_message = utilities.sign_encrypt_sign(message,
-                signing_key, encryption_key)
+        signed_encrypted_signed_message = \
+            utilities.sign_encrypt_sign(message, signing_key, encryption_key)
 
         # verify positive
         verified_decrypted_verified_message = utilities.verify_decrypt_verify(
-                signed_encrypted_signed_message, verify_key, encryption_key)
+            signed_encrypted_signed_message, verify_key, encryption_key)
         self.assertEqual(message, verified_decrypted_verified_message)
 
         # verify negative
@@ -217,13 +219,14 @@ class TestFunctions(unittest.TestCase):
             spoof = "0"*len(nacl.encoding.HexEncoder.encode(
                 verified_decrypted_verified_message))
             verified_decrypted_verified_message = \
-                    utilities.verify_decrypt_verify(spoof, verify_key,
-                            encryption_key)
+                utilities.verify_decrypt_verify(spoof, verify_key,
+                                                encryption_key)
         self.assertTrue("Signature was forged or corrupt"
-                in bad_signature.exception)
+                        in bad_signature.exception)
 
     def test_quantum_vulnerable_signing(self):
-        from PQencryption.pub_key.pk_signature.quantum_vulnerable import signing_Curve25519_PyNaCl
+        from PQencryption.pub_key.pk_signature.quantum_vulnerable \
+            import signing_Curve25519_PyNaCl
         from PQencryption import utilities
 
         signing_key, verify_key = utilities.generate_signing_verify_keys()
@@ -242,14 +245,15 @@ class TestFunctions(unittest.TestCase):
             spoof = "0"*len(signed)
             out = verify_key.verify(spoof)
         self.assertTrue("Signature was forged or corrupt"
-                in bad_signature.exception)
+                        in bad_signature.exception)
 
         # test derived key
         derived_verify_key = signing_key.verify_key
         self.assertEqual(verify_key, derived_verify_key)
 
     def test_quantum_vulnerable_encryption(self):
-        from PQencryption.pub_key.pk_encryption.quantum_vulnerable import encryption_Curve25519_PyNaCl
+        from PQencryption.pub_key.pk_encryption.quantum_vulnerable \
+            import encryption_Curve25519_PyNaCl
         from PQencryption import utilities
 
         public_key_Alice, secret_key_Alice = \
@@ -262,14 +266,17 @@ class TestFunctions(unittest.TestCase):
 
         # encrypting
         encrypted = encryption_Curve25519_PyNaCl.encrypt(message,
-                secret_key_Alice, public_key_Bob)
+                                                         secret_key_Alice,
+                                                         public_key_Bob)
 
         # decrypting
         decrypted_BA = encryption_Curve25519_PyNaCl.decrypt(encrypted,
-                secret_key_Bob, public_key_Alice)
+                                                            secret_key_Bob,
+                                                            public_key_Alice)
 
         decrypted_AB = encryption_Curve25519_PyNaCl.decrypt(encrypted,
-                secret_key_Alice, public_key_Bob)
+                                                            secret_key_Alice,
+                                                            public_key_Bob)
 
         self.assertNotEqual(message, encrypted)
         self.assertEqual(message, decrypted_BA)
@@ -286,6 +293,7 @@ class TestFunctions(unittest.TestCase):
         string = "486578206d652e"
         de_hexed = utilities.from_hex(string)
         self.assertEqual(de_hexed, "Hex me.")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

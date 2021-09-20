@@ -16,11 +16,13 @@ synd_bytes = 208
 len_pk = 1357824
 len_sk = 13008
 
+
 def generate_keys():
     secret_key = (ctypes.c_ubyte * len_sk)()
     public_key = (ctypes.c_ubyte * len_pk)()
     mcbits.crypto_encrypt_keypair(public_key, secret_key)
     return bytearray(secret_key), bytearray(public_key)
+
 
 def encrypt(message, public_key_byte_array):
     key_length = len(public_key_byte_array)
@@ -31,9 +33,10 @@ def encrypt(message, public_key_byte_array):
     clen = ctypes.c_longlong()
 
     mcbits.crypto_encrypt(cypher, ctypes.byref(clen), message, message_length,
-            public_key)
+                          public_key)
 
     return cypher
+
 
 def decrypt(encrypted_message, secret_key_byte_array):
     key_length = len(secret_key_byte_array)
@@ -44,19 +47,23 @@ def decrypt(encrypted_message, secret_key_byte_array):
     mlen = ctypes.c_longlong()
 
     status = mcbits.crypto_encrypt_open(decrypted, ctypes.byref(mlen),
-            encrypted_message, cypher_length, secret_key)
+                                        encrypted_message, cypher_length,
+                                        secret_key)
 
     if status == 0:
         return decrypted
     else:
         raise ValueError("Decryption failed, 'mcbits.crypto_encrypt_open "
-        "return value' is not zero")
+                         "return value' is not zero")
+
 
 if __name__ == "__main__":
-# This in an example. In production, you would want to read the key from an
-# external file or the command line. The key must be 32 bytes long.
+    import gc
+    import nacl
+    # This in an example. In production, you would want to read the key from an
+    # external file or the command line. The key must be 32 bytes long.
 
-# DON'T DO THIS IN PRODUCTION!
+    # DON'T DO THIS IN PRODUCTION!
     secret_key_Bob = nacl.public.PrivateKey.generate()
     public_key_Bob = secret_key_Bob.public_key
 
@@ -69,7 +76,7 @@ if __name__ == "__main__":
 # encrypting
     encrypted = encrypt(secret_key_Alice, public_key_Bob, message)
     print("encrypted: "
-            + nacl.encoding.HexEncoder.encode(encrypted))
+          + nacl.encoding.HexEncoder.encode(encrypted))
 
 # decrypting
     decrypted_BA = decrypt(secret_key_Bob, public_key_Alice, encrypted)
