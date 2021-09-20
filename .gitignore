@@ -5,3 +5,8 @@ __pycache__
 
 # vim
 .swp
+
+# testing keys
+_PRIVATE_signing_key_CBS
+_PRIVATE_symmetric_key_CBS
+verify_key_CBS

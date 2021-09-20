@@ -160,8 +160,7 @@ def example_quantum_vulnerable_signing():
     print()
 
     # signing
-    signed, verify_key = signing_Curve25519_PyNaCl.sign(signing_key,
-            message)
+    signed = signing_Curve25519_PyNaCl.sign(signing_key, message)
     verify_key_hex = utilities.to_hex(str(verify_key))
     print()
     print("signed (will look garbled): " + signed)
@@ -197,10 +196,8 @@ def example_quantum_vulnerable_signing():
         print("="*79)
 
 def example_export_symmetric_key():
-    import nacl.encoding
     from PQencryption import utilities
-    s_raw = utilities.generate_symmetric_key()
-    s = nacl.encoding.HexEncoder.encode(s_raw)
+    s = utilities.generate_symmetric_key()
     path = "."
     s_header = ("# This is an encrypted symmetric key."
             "KEEP IT PRIVATE!\n")
@@ -212,8 +209,8 @@ def example_export_public_key():
     import nacl.encoding
     from PQencryption import utilities
     s_raw, v_raw = utilities.generate_signing_verify_keys()
-    s = s_raw.encode(encoder=nacl.encoding.HexEncoder)
-    v = v_raw.encode(encoder=nacl.encoding.HexEncoder)
+    s = utilities.to_hex(str(s_raw))
+    v = utilities.to_hex(str(v_raw))
     path = "."
     s_header = ("# This is an encrypted private signing key."
             "KEEP IT PRIVATE!\n")
@@ -261,49 +258,42 @@ def example_import_symmetric_key(path, symmetric_key, s_name):
     print("="*79)
 
 def example_generate_public_private_keys():
-    import nacl.encoding
     from PQencryption import utilities
-    pu_raw, pr_raw = utilities.generate_public_private_keys()
-    public_key = pu_raw.encode(encoder=nacl.encoding.HexEncoder)
-    private_key = pr_raw.encode(encoder=nacl.encoding.HexEncoder)
+    public_key, private_key = utilities.generate_public_private_keys()
     print(public_key)
     print(private_key)
 
 def example_generate_signing_verify_keys():
-    import nacl.encoding
     from PQencryption import utilities
-    s_raw, v_raw = utilities.generate_signing_verify_keys()
-    signing_key = s_raw.encode(encoder=nacl.encoding.HexEncoder)
-    verify_key = v_raw.encode(encoder=nacl.encoding.HexEncoder)
+    signing_key, verify_key = utilities.generate_signing_verify_keys()
     print(signing_key)
     print(verify_key)
 
 def example_generate_symmetric_key():
     from PQencryption import utilities
     import nacl.encoding
-    s_raw = utilities.generate_symmetric_key()
-    symmetric_key = nacl.encoding.HexEncoder.encode(s_raw)
+    symmetric_key = utilities.generate_symmetric_key()
     print(symmetric_key)
 
 if __name__ == "__main__":
-    #example_hashing_PyNaCl()
+    example_hashing_PyNaCl()
 
-    #example_hashing_hashlib()
+    example_hashing_hashlib()
 
-    #example_AES256()
+    example_AES256()
 
-    #example_salsa20_256_PyNaCl()
+    example_salsa20_256_PyNaCl()
 
-    #example_generate_public_private_keys()
+    example_generate_public_private_keys()
 
-    #example_generate_signing_verify_keys()
+    example_generate_signing_verify_keys()
 
-    #example_generate_symmetric_key()
+    example_generate_symmetric_key()
 
-    #example_import_public_key(*example_export_public_key())
+    example_import_public_key(*example_export_public_key())
 
-    #example_import_symmetric_key(*example_export_symmetric_key())
+    example_import_symmetric_key(*example_export_symmetric_key())
 
-    #example_quantum_vulnerable_encryption()
+    example_quantum_vulnerable_encryption()
 
-    #example_quantum_vulnerable_signing()
+    example_quantum_vulnerable_signing()

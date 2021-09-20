@@ -17,6 +17,7 @@ import nacl.encoding
 import nacl.public
 from PQencryption.symmetric_encryption import salsa20_256_PyNaCl
 from PQencryption.pub_key.pk_signature.quantum_vulnerable import signing_Curve25519_PyNaCl
+from PQencryption.pub_key.pk_encryption.quantum_vulnerable import encryption_Curve25519_PyNaCl
 
 def check_password(password):
 	length = 20
@@ -120,6 +121,19 @@ def to_hex(string):
 
 def from_hex(string):
     return nacl.encoding.HexEncoder.decode(string)
+
+def generate_public_private_keys():
+    signing_key_raw, verify_key_raw = encryption_Curve25519_PyNaCl.key_gen()
+    return signing_key_raw, verify_key_raw
+
+def generate_signing_verify_keys():
+    signing_key_hex, verify_key_hex = signing_Curve25519_PyNaCl.key_gen()
+    return signing_key_hex, verify_key_hex
+
+def generate_symmetric_key():
+    symmetric_key_raw = salsa20_256_PyNaCl.key_gen()
+    symmetric_key_hex = to_hex(symmetric_key_raw)
+    return symmetric_key_hex
 
 def sign_encrypt_sign(message, signing_key, encryption_key):
     signed_message = signing_Curve25519_PyNaCl.sign(signing_key, message)
