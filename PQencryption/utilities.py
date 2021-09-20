@@ -131,9 +131,8 @@ def generate_signing_verify_keys():
     return signing_key_hex, verify_key_hex
 
 def generate_symmetric_key():
-    symmetric_key_raw = salsa20_256_PyNaCl.key_gen()
-    symmetric_key_hex = to_hex(symmetric_key_raw)
-    return symmetric_key_hex
+    symmetric_key = salsa20_256_PyNaCl.key_gen()
+    return symmetric_key
 
 def sign_encrypt_sign(message, signing_key, encryption_key):
     signed_message = signing_Curve25519_PyNaCl.sign(signing_key, message)
