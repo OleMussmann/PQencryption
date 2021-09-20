@@ -197,9 +197,14 @@ def example_quantum_vulnerable_signing():
 
 def example_export_symmetric_key():
     from PQencryption import utilities
+    import os
+
+    if not os.path.exists("./.tmp"):
+        os.mkdir("./.tmp")
+
     s_raw = utilities.generate_symmetric_key()
     s = utilities.to_hex(s_raw)
-    path = "."
+    path = ".tmp"
     s_header = ("# This is an encrypted symmetric key."
             "KEEP IT PRIVATE!\n")
     s_name = "_PRIVATE_symmetric_key_CBS"
@@ -209,10 +214,15 @@ def example_export_symmetric_key():
 def example_export_public_key():
     import nacl.encoding
     from PQencryption import utilities
+    import os
+
+    if not os.path.exists("./.tmp"):
+        os.mkdir("./.tmp")
+
     s_raw, v_raw = utilities.generate_signing_verify_keys()
     s = utilities.to_hex(str(s_raw))
     v = utilities.to_hex(str(v_raw))
-    path = "."
+    path = ".tmp"
     s_header = ("# This is an encrypted private signing key."
             "KEEP IT PRIVATE!\n")
     v_header = ("# This is a public verification key."
