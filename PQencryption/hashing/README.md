@@ -1,0 +1,1 @@
+Hashlib is about 2x faster than PyNaCl. Since PyNaCl will be used also for encryption, we have to do real-world performance tests to see if it is worth to install an extra package (hashlib) only for hashing.

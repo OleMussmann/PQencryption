@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: PQencryption
+Source: https://github.com/OleMussmann/PQencryption
+
+Files: libmcbits.so
+Copyright: 2019 Tung Chou
+Source: https://tungchou.github.io/mcbits/
+License: Public Domain
+
+Files: *
+Copyright: 2029 Ole Mussmann <bo.mussmann@cbs.nl>
+License: Apache 2.0
