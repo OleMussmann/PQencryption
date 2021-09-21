@@ -6,8 +6,6 @@ Created on 4 jul 2017 12:31:39 CEST
 @author: BMMN
 """
 
-from __future__ import print_function  # make print python3 compatible
-
 import base64
 from Crypto import Random
 from Crypto.Cipher import AES

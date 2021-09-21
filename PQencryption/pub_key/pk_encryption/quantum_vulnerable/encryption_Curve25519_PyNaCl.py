@@ -6,8 +6,6 @@ Created on Mon Jul 10 16:26:41 CEST 2017
 @author: BMMN
 """
 
-from __future__ import print_function  # make print python3 compatible
-
 import nacl.utils
 import nacl.public
 import nacl.encoding

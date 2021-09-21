@@ -6,7 +6,6 @@ Created on vr 25 aug 2017 17:44:50 CEST
 @author: BMMN
 """
 
-from __future__ import print_function  # make print python3 compatible
 import os
 import ctypes
 

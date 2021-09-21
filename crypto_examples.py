@@ -6,7 +6,6 @@ Created on Thu Jul 13 08:46:20 CEST 2017
 @author: BMMN
 """
 
-from __future__ import print_function  # make print python3 compatible
 import gc  # garbage collection
 
 

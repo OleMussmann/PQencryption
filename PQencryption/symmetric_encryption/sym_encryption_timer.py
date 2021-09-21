@@ -5,8 +5,6 @@ Created on Fri Jul  7 16:44:29 CEST 2017
 @author: BMMN
 """
 
-from __future__ import print_function  # make print python3 compatible
-
 import timeit
 
 key = b'Thirtytwo byte key, this is long'
