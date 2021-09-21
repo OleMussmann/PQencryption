@@ -20,6 +20,7 @@ from PQencryption.pub_key.pk_signature.quantum_vulnerable \
     import signing_Curve25519_PyNaCl
 from PQencryption.pub_key.pk_encryption.quantum_vulnerable \
     import encryption_Curve25519_PyNaCl
+from PQencryption.pub_key.pk_encryption.quantum_safe import encryption_mcbits
 
 
 def check_password(password):
@@ -134,8 +135,8 @@ def from_hex(string):
 
 
 def generate_public_private_keys():
-    signing_key_raw, verify_key_raw = encryption_Curve25519_PyNaCl.key_gen()
-    return signing_key_raw, verify_key_raw
+    public_key_raw, private_key_raw = encryption_Curve25519_PyNaCl.key_gen()
+    return public_key_raw, private_key_raw
 
 
 def generate_signing_verify_keys():
@@ -146,6 +147,11 @@ def generate_signing_verify_keys():
 def generate_symmetric_key():
     symmetric_key = salsa20_256_PyNaCl.key_gen()
     return symmetric_key
+
+
+def generate_quantum_safe_keys():
+    public_key, secret_key = encryption_mcbits.generate_keys()
+    return public_key, secret_key
 
 
 def sign_encrypt_sign(message, signing_key, encryption_key):
@@ -173,3 +179,11 @@ def sign_models(models, signing_key):
 def verify_models(signed_models, verify_key):
     verified_models = verify_key.verify(signed_models)
     return verified_models
+
+
+def encrypt_quantum_safe(message, public_key):
+    return encryption_mcbits.encrypt(message, public_key)
+
+
+def decrypt_quantum_safe(encrypted_message, secret_key):
+    return encryption_mcbits.decrypt(encrypted_message, secret_key)

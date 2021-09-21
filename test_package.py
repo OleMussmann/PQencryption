@@ -294,6 +294,23 @@ class TestFunctions(unittest.TestCase):
         de_hexed = utilities.from_hex(string)
         self.assertEqual(de_hexed, "Hex me.")
 
+    def test_quantum_safe_encryption(self):
+        from PQencryption import utilities
+
+        public_key, secret_key = utilities.generate_quantum_safe_keys()
+        message = 'This is my message.'
+
+        # encryption
+        my_encrypted_message = \
+            utilities.encrypt_quantum_safe(message, public_key)
+
+        # decryption
+        my_decrypted_message = \
+            utilities.decrypt_quantum_safe(my_encrypted_message, secret_key)
+
+        self.assertNotEqual(message, my_encrypted_message)
+        self.assertEqual(message, my_decrypted_message)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
