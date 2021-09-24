@@ -1,7 +1,20 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
+"""Example usage of the PQencryption package.
+
+This example file demonstrates the usage of the PQencryption package. In the
+`if __name__ == "__main__":` section: comment and uncomment the functions
+that you want to have demonstrated or omitted. Then run this module as
+indicated under 'Example' below.
+
+Example:
+    $ python crypto_examples.py
+
 Created on Thu Jul 13 08:46:20 CEST 2017
+
+Modified on Fri Sep 24 14:04:00 CEST 2021:
+    - For the purpose of code reviews, an example docstrings is added
+      to the function 'example_hashing_hashlib'.
 
 @author: BMMN
 """
@@ -10,6 +23,21 @@ import gc  # garbage collection
 
 
 def example_hashing_hashlib():
+    """Example function to demonstrate hashing with 'hashlib'.
+
+    For the PQencryption package, hashing is always used with a prepended
+    'salt'. This is a 128 bytes long cryptographic key pre-pended to the
+    message-to-be-hashed to prevent rainbow table attacks
+    (see: https://www.geeksforgeeks.org/understanding-rainbow-table-attack/)
+    or brute-forcing.
+
+    salt (str): a 128 bytes long key in hex
+
+    message (str): an arbitrarily long string
+
+    After all necessary computations, delete sensitive variables and
+    manually call the garbage collector for clean-up.
+    """
     from PQencryption.hashing import sha_512_hashlib
     # In production the salt should come from a hardware random number
     # generator and will be shared between parties.

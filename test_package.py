@@ -1,7 +1,18 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
+"""Provide test functions for the PQencryption package.
+
+All test functions are part of a 'unittest.TestCase' subclass, so that
+executing `unittest.main` can generate coherent summaries of the test
+outputs.
+
 Created on Thu Jul 13 08:46:20 CEST 2017
+
+Modified on Fri Sep 24 14:03:00 CEST 2021:
+    - Merge different tests
+    - For the purpose of code reviews, two example docstrings are added
+      to the class 'TestFunctions' and the function
+      'test_generate_signing_verify_key'.
 
 @author: BMMN
 """
@@ -10,15 +21,31 @@ import unittest
 import mock
 import os
 
+# For exporting and importing keys, we need a directory to write to.
 if not os.path.exists("./.tmp"):
     os.mkdir("./.tmp")
-
 with open("./.tmp/README.md", 'w') as f:
     f.write("This directory stores temporary keys for testing.\n")
 
 
 class TestFunctions(unittest.TestCase):
+    """TestCase sub-class providing test functions.
+
+    By executing `unittest.main`, all functions defined in this class
+    will be executed, and their assertions checked. A summary will
+    be printed to screen, indicating successes and failures of these
+    tests.
+    """
     def test_generate_signing_verify_key(self):
+        """Testing the generation of signing- and verification-keys.
+
+        Signing- and verification-keys are generated and checked for their
+        correct type and length.
+
+        Raises:
+            AssertionError: For failed test assertions
+            ValueError: If the conversion to hex failed
+        """
         import nacl.signing
         from PQencryption import utilities
         s_raw, v_raw = utilities.generate_signing_verify_keys()
