@@ -29,7 +29,7 @@ class TestFunctions(unittest.TestCase):
         self.assertIsInstance(s_raw, nacl.signing.SigningKey)
         self.assertIsInstance(v_raw, nacl.signing.VerifyKey)
 
-        # Do they have the length correct?
+        # Do they have the correct length?
         self.assertEqual(len(signing_key_hex), 64)
         self.assertEqual(len(verify_key_hex), 64)
 
@@ -52,7 +52,7 @@ class TestFunctions(unittest.TestCase):
         self.assertIsInstance(pub_raw, nacl.public.PublicKey)
         self.assertIsInstance(priv_raw, nacl.public.PrivateKey)
 
-        # Do they have the length correct?
+        # Do they have the correct length?
         self.assertEqual(len(public_key_hex), 64)
         self.assertEqual(len(private_key_hex), 64)
 
@@ -73,7 +73,7 @@ class TestFunctions(unittest.TestCase):
         # Is it of the correct type?
         self.assertIsInstance(sym_raw, str)
 
-        # Does it have the length correct?
+        # Does it have the correct length?
         self.assertEqual(len(sym_raw), 32)
 
         # Is it properly converted to Hex?
