@@ -3,7 +3,7 @@
 """Provide test functions for the PQencryption package.
 
 All test functions are part of a 'unittest.TestCase' subclass, so that
-executing `unittest.main` can generate coherent summaries of the test
+executing 'unittest.main' can generate coherent summaries of the test
 outputs.
 
 Created on Thu Jul 13 08:46:20 CEST 2017
@@ -12,7 +12,7 @@ Modified on Fri Sep 24 14:03:00 CEST 2021:
     - Merge different tests
     - For the purpose of code reviews, two example docstrings are added
       to the class 'TestFunctions' and the function
-      'test_generate_signing_verify_key'.
+      'test_generate_signing_verify_key'
 
 @author: BMMN
 """
@@ -29,9 +29,9 @@ with open("./.tmp/README.md", 'w') as f:
 
 
 class TestFunctions(unittest.TestCase):
-    """TestCase sub-class providing test functions.
+    """Provide test functions for the PQencryption package.
 
-    By executing `unittest.main`, all functions defined in this class
+    By executing 'unittest.main', all functions defined in this class
     will be executed, and their assertions checked. A summary will
     be printed to screen, indicating successes and failures of these
     tests.

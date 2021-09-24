@@ -13,8 +13,8 @@ Example:
 Created on Thu Jul 13 08:46:20 CEST 2017
 
 Modified on Fri Sep 24 14:04:00 CEST 2021:
-    - For the purpose of code reviews, an example docstrings is added
-      to the function 'example_hashing_hashlib'.
+    - For the purpose of code reviews, an example docstring is added
+      to the function 'example_hashing_hashlib'
 
 @author: BMMN
 """
@@ -31,9 +31,9 @@ def example_hashing_hashlib():
     (see: https://www.geeksforgeeks.org/understanding-rainbow-table-attack/)
     or brute-forcing.
 
-    salt (str): a 128 bytes long key in hex
-
-    message (str): an arbitrarily long string
+    Key parameters:
+        salt (str): a 128 bytes long key in hex
+        message (str): an arbitrarily long string
 
     After all necessary computations, delete sensitive variables and
     manually call the garbage collector for clean-up.
